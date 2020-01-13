@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
+using AutoMapper;
 using GestionPermisos.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,6 +28,8 @@ namespace GestionPermisos
         public void ConfigureServices(IServiceCollection services)
         {
             var _defaulSqlConString = Configuration.GetConnectionString("SQLConnString");
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -54,6 +58,22 @@ namespace GestionPermisos
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
+
+
+
+        /// <summary>
+        /// Autofac configuration.....
+        /// en este metodo registrados todos los modulos, servicios y demas que queremo tener
+        /// disponibles para la inyectar en la aplicacion.
+        /// e
+        /// </summary>
+        /// <param name="builder"></param>
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule<RepositoryModule>();
+
+        }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
